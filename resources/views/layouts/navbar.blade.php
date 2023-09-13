@@ -22,12 +22,13 @@
 
 			<div class="d-flex align-items-center">
 				<button type="button" class="btn btn-link px-3 me-2" >Регистрация</button>
-				<button
+				<a
 					type="button"
 					class="btn btn-primary me-3"
+					href="{{ route('login') }}"
 				>
 					Вход
-				</button>
+				</a>
 				<!-- <a
 					class="btn btn-dark px-3"
 					href="https://github.com/mdbootstrap/mdb-ui-kit"

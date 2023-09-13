@@ -5,5 +5,5 @@
 @endsection
 
 @section('content')
-	<h1>Some DB</h1>
+	@include('components.table')
 @endsection

@@ -24,3 +24,7 @@ Route::get('/db', function () {
 Route::get('/login', function () {
     return view('login');
 })->name('login');
+
+Route::post('/db/post',
+	'App\Http\Controllers\DbController@setData'
+)->name('dbpost');
