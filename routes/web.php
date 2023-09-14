@@ -17,14 +17,14 @@ Route::get('/', function () {
     return view('index');
 })->name('index');
 
-Route::get('/db', function () {
-    return view('db');
-})->name('db');
-
-Route::get('/login', function () {
-    return view('login');
-})->name('login');
+Route::get('/db',
+	'App\Http\Controllers\DbController@getData'
+)->name('db');
 
 Route::post('/db/post',
 	'App\Http\Controllers\DbController@setData'
 )->name('dbpost');
+
+Route::get('/login', function () {
+    return view('login');
+})->name('login');
