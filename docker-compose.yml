@@ -4,27 +4,26 @@ services:
   #PHP Service
   app:
     build:
-      context: .
-      dockerfile: Dockerfile
-    # image: digitalocean.com/php
+      context: app
+      dockerfile: Dockerfile.prod
     container_name: app
     restart: unless-stopped
     tty: true
     environment:
       SERVICE_NAME: app
-      SERVICE_TAGS: dev
     working_dir: /var/www
     networks:
       - app-network
     volumes:
-      - ./:/var/www
-      - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
-    
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+
 
   #Nginx Service
   webserver:
     image: nginx:alpine
     container_name: webserver
+    depends_on:
+      - app
     restart: unless-stopped
     tty: true
     ports:
@@ -32,8 +31,8 @@ services:
     networks:
       - app-network
     volumes:
-      - ./:/var/www
-      - ./nginx/conf.d/:/etc/nginx/conf.d/
+      - ./app:/var/www
+      - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
 
 #Docker Networks
 networks:

@@ -1,0 +1,32 @@
+version: '3'
+services:
+  #PHP Service
+  app:
+    extends:
+      file: docker-compose.yml
+      service: app
+    build:
+      context: app
+      dockerfile: Dockerfile.dev
+    environment:
+      SERVICE_TAGS: dev
+    volumes:
+      - ./app:/var/www
+
+  #Nginx Service
+  webserver:
+    extends:
+      file: docker-compose.yml
+      service: webserver
+    volumes:
+      - ./app:/var/www
+
+#Docker Networks
+networks:
+  app-network:
+    driver: bridge
+    
+#Volumes
+volumes:
+  dbdata:
+    driver: local

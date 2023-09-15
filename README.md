@@ -15,12 +15,7 @@ Launch the container:
 docker compose up -d
 ```
 
-Install composer dependencies:
-```bash
-docker exec app composer install
-```
-
-Install composer dependencies:
+Install composer dependencies (if on dev set):
 ```bash
 docker exec app composer install
 ```
