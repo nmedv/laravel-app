@@ -10,9 +10,9 @@ class DbController extends Controller
 {
 	public function getData()
 	{
-		$db = new Db();
+		// $db = new Db();
 		
-		return $db->all();
+		return view('db');
 	}
 
 	public function setData(DbRequest $request)

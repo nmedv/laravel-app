@@ -4,10 +4,10 @@
 <div class="accordion-item">
 <h2 class="accordion-header" id="headingOne">
 <button
-	class="accordion-button"
+	class="accordion-button collapsed"
 	type="button"
-	data-mdb-toggle="collapse"
-	data-mdb-target="#collapseOne"
+	data-bs-toggle="collapse"
+	data-bs-target="#collapseOne"
 	aria-expanded="true"
 	aria-controls="collapseOne"
 >Добавить запись</button>
@@ -25,23 +25,25 @@
 		@csrf
 			<div class="row mb-3">
 				<div class="col">
-					<div class="form-outline">
+					<div class="form-floating">
 					<input class="form-control"
 						id="inp-db-1"
 						type="text"
 						name="firstname"
+						placeholder="firstname"
 					/>
-					<label class="form-label" for="inp-db-1">Имя</label>
+					<label for="inp-db-1">Имя</label>
 					</div>
 				</div>
 				<div class="col">
-					<div class="form-outline">
+					<div class="form-floating">
 					<input class="form-control"
 						id="inp-db-2"
 						type="date"
 						name="dob"
+						placeholder="Date of birth"
 					/>
-					<label class="form-label" for="inp-db-1">Дата рождения</label>
+					<label for="inp-db-2">Дата рождения</label>
 					</div>
 				</div>
 				<div class="col">
@@ -64,3 +66,7 @@
 </tbody>
 </table>
 </section>
+
+<script type="text/javascript">
+	
+</script>

@@ -12,15 +12,15 @@
 
 <h3 class="mb-5 text-center">Вход</h3>
 <!-- Email input -->
-<div class="form-outline mb-4">
-	<input type="email" id="form1Example1" class="form-control" />
-	<label class="form-label" for="form1Example1">Логин</label>
+<div class="form-floating mb-4">
+	<input type="email" id="form1Example1" class="form-control" placeholder="login"/>
+	<label for="form1Example1">Логин</label>
 </div>
 
 <!-- Password input -->
-<div class="form-outline mb-4">
-	<input type="password" id="form1Example2" class="form-control" />
-	<label class="form-label" for="form1Example2">Пароль</label>
+<div class="form-floating mb-4">
+	<input type="password" id="form1Example2" class="form-control" placeholder="Password"/>
+	<label for="form1Example1">Пароль</label>
 </div>
 
 <!-- 2 column grid layout for inline styling -->

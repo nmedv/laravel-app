@@ -1,11 +1,13 @@
 @extends('layouts.base')
 
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light border-bottom">
 	<!-- Container wrapper -->
-	<div class="container">
+	<div class="container mb-2 mt-2 align-items-center justify-content-center">
 		<!-- Navbar brand -->
-		<a class="navbar-brand me-2" href="{{ route('index') }}">laravel-app</a>
+		<a class="navbar-brand me-2" href="{{ route('index') }}">
+			<strong>laravel-app</strong>
+		</a>
 
 		<!-- Collapsible wrapper -->
 		<div class="collapse navbar-collapse" id="navbarButtonsExample">
@@ -21,14 +23,21 @@
 			<!-- Left links -->
 
 			<div class="d-flex align-items-center">
-				<button type="button" class="btn btn-link px-3 me-2" >Регистрация</button>
 				<a
 					type="button"
-					class="btn btn-primary me-3"
+					class="btn btn-outline-primary me-3"
 					href="{{ route('login') }}"
 				>
 					Вход
 				</a>
+				<a
+					type="button"
+					class="btn btn-primary me-3"
+					href="#"
+				>
+					Регистрация
+				</a>
+				
 				<!-- <a
 					class="btn btn-dark px-3"
 					href="https://github.com/mdbootstrap/mdb-ui-kit"
