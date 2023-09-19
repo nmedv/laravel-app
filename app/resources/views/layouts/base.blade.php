@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+	@yield('meta')
 	<title>@yield('title')</title>
 
 	<!-- Fonts -->
@@ -31,7 +31,11 @@
 </head>
 <bode>
 	@yield('navbar')
-	@yield('content')
+	<div id="content-block">
+		@yield('content')
+	</div>
+
+	@yield('scripts')
 
 	<!-- <footer>
 		<div class="text-center p-4">

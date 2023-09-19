@@ -3,7 +3,7 @@
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light border-bottom">
 	<!-- Container wrapper -->
-	<div class="container mb-2 mt-2 align-items-center justify-content-center">
+	<div class="container-fluid mb-2 mt-2 align-items-center justify-content-center">
 		<!-- Navbar brand -->
 		<a class="navbar-brand me-2" href="{{ route('index') }}">
 			<strong>laravel-app</strong>

@@ -25,6 +25,14 @@ Route::post('/db/post',
 	'App\Http\Controllers\DbController@setData'
 )->name('dbpost');
 
+Route::get('/postdebug', function () {
+    return view('postdebug');
+})->name('postdebug');
+
+Route::get('/db/get',
+	'App\Http\Controllers\DbController@getJsonData'
+)->name('dbget');
+
 Route::get('/login', function () {
     return view('login');
 })->name('login');
