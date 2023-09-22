@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DbController;
+use App\Http\Controllers\TablesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,29 +14,34 @@ use App\Http\Controllers\DbController;
 |
 */
 
+
+/* Index */
+
 Route::get('/', function () {
 	return view('index');
 })->name('index');
 
-Route::get('/db',
-	[DbController::class, 'getDbPage']
-)->name('db');
 
-Route::get('/db/clear/{table}',
-	[DbController::class, 'removeData']
-)->name('db.clear');
+/* Tables */
 
-Route::post('/db/add-entry/',
-	[DbController::class, 'addEntry']
-)->name('db.addEntry');
+Route::get('/tables',
+	[TablesController::class, 'tables']
+)->name('tables');
 
-Route::get('/db/get',
-	[DbController::class, 'getData']
-)->name('db.getData');
+Route::post('/tables/add',
+	[TablesController::class, 'add']
+)->name('tables.add');
 
-Route::post('/db/delete-entry',
-	[DbController::class, 'deleteEntry']
-)->name('db.deleteEntry');
+Route::post('/tables/delete',
+	[TablesController::class, 'delete']
+)->name('tables.deletе');
+
+Route::get('/tables/clear',
+	[TablesController::class, 'clear']
+)->name('tables.clear');
+
+
+/* Login */
 
 Route::get('/login', function () {
 	return view('login');

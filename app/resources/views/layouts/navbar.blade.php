@@ -17,7 +17,7 @@
 					<a class="nav-link" href="{{ route('index') }}">Главная</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="{{ route('db') }}">БД</a>
+					<a class="nav-link" href="{{ route('tables') }}">Таблицы</a>
 				</li>
 			</ul>
 			<!-- Left links -->

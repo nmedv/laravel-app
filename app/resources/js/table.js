@@ -2,25 +2,75 @@
 
 class TableRowToolbar
 {
+	name
 	element
+	editor
+	btnId
 
-	constructor(name)
+
+	constructor(name, id, editor)
 	{
+		this.name = name;
+		this.editor = editor;
+		this.btnId = `row-toolbar-btn-table-${this.name}-${id}`;
+
 		this.element = document.createElement("td");
 		this.element.innerHTML = `
 		<button
 			class="btn btn-light"
 			type="button"
-			id="row-toolbar-btn-table-${name}"
+			id="${this.btnId}"
 			data-bs-toggle="dropdown"
 			aria-expanded="false"
 		>
 			\u2807
 		</button>
-		<ul class="dropdown-menu" aria-labelledby="row-toolbar-btn-table-${name}">
+		<ul class="dropdown-menu" aria-labelledby="${this.btnId}">
 			<button class='dropdown-item btn btn-light'>Изменить</button>
 			<button class='dropdown-item btn btn-light text-danger'>Удалить</button>
 		</ul>`;
+	}
+
+
+	init()
+	{
+		this.element = document.getElementById(this.btnId).parentElement;
+		for (var btn of this.element.lastElementChild.children) {
+			btn.editor = this.editor;
+			btn.primaryIndex = this.editor.data.primaryIndex;
+		}
+
+		this.element.lastElementChild.children[1].onclick = this.deleteHandler;
+	}
+
+
+	async deleteHandler(event)
+	{
+		// if (event.target.tagName != "BUTTON") return;
+		// if (event.target.innerHTML != "Удалить") return;
+		
+		var primaryParam = event.target.closest("tr").children[event.target.primaryIndex].innerHTML;
+		var editor = event.target.editor;
+		var body = new URLSearchParams({
+			"table": editor.name,
+			"id": primaryParam
+		});
+
+		editor.setLoading(true);
+
+		const response = await fetch(editor.deleteURL, {
+			method: 'POST',
+			headers: {
+				"X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
+			},
+			body: body
+		});
+
+		if (response.ok) {
+			await editor.update();
+		}
+
+		editor.setLoading(false);
 	}
 }
 
@@ -30,11 +80,14 @@ class Table
 	name
 	element
 	loadScreen
+	toolbars
 	thead
 	tbody
+	editor
 
-	constructor(name)
+	constructor(name, editor)
 	{
+		this.editor = editor;
 		this.name = name;
 
 		this.element = document.createElement("div");
@@ -72,18 +125,26 @@ class Table
 		this.thead = this.element.lastElementChild.firstElementChild;
 		this.tbody = this.element.lastElementChild.lastElementChild;
 	}
-
 	
-	setData(data, columns)
-	{		
+
+	load()
+	{	
+		var columns = [];
+		for (var info of this.editor.data.colinfo) {
+			columns.push(info[1]);
+		}
+
 		this.thead.innerHTML = this.#generateThead(columns);
-		this.updateData(data);
+		this.update();
 	}
 
 
-	updateData(data)
+	update()
 	{
-		this.tbody.innerHTML = this.#generateTbody(data);
+		this.tbody.innerHTML = this.#generateTbody(dataToArray(this.editor.data.data));
+		for (var tlbr of this.toolbars) {
+			tlbr.init();
+		}
 	}
 
 
@@ -100,6 +161,7 @@ class Table
 
 	#generateTbody(data)
 	{
+		this.toolbars = []
 		var toolbar;
 		var i = 0;
 		var tbody = "";
@@ -108,7 +170,8 @@ class Table
 			for (var cell of row) {
 				tbody += `<td>${cell}</td>`;
 			}
-			toolbar = new TableRowToolbar(`${this.name}-${i++}`);
+			toolbar = new TableRowToolbar(this.name, i++, this.editor);
+			this.toolbars.push(toolbar)
 			tbody += `${toolbar.element.outerHTML}</tr>`;
 		}
 
@@ -133,12 +196,14 @@ class TableEditorForm
 	element
 	inputCount = 0
 	body
+	editor
 	#hasSubmit = false
 	#submitValue
 
-	constructor(name)
+	constructor(name, editor)
 	{
 		this.name = name;
+		this.editor = editor;
 
 		this.body = document.createElement("div")
 		this.body.id = `form-grid-${this.name}`;
@@ -158,7 +223,23 @@ class TableEditorForm
 	init()
 	{
 		this.element = document.getElementById(this.element.id);
+		this.element.onsubmit = this.sendData;
+		this.element.editor = this.editor;
+
 		this.body = document.getElementById(this.body.id);
+	}
+
+
+	load()
+	{
+		var colinfo = this.editor.data.colinfo;
+		for (var i = 0; i < colinfo.length; i++) {
+			if (colinfo[i][3]) {
+				this.addField(colinfo[i][0], colinfo[i][1], colinfo[i][2])
+			}
+		}
+		
+		this.addField(null, "Добавить", "submit");
 	}
 
 
@@ -215,32 +296,47 @@ class TableEditorForm
 		// var subm = document.getElementById(`submit-${this.name}`);
 		var subm = this.element.getElementsByTagName("button")[0];
 		subm.disabled = status;
-		if (status) {
-			subm.innerHTML = `
-				<span
-					class="spinner-border spinner-border-sm"
-					role="status"
-					aria-hidden="true">
-				</span>
-				<span">${this.#submitValue}</span>
-			`;
-		} else {
-			subm.innerHTML = this.#submitValue;
-		}	
+		// if (status) {
+		// 	subm.innerHTML = `
+		// 	<span
+		// 		class="spinner-border spinner-border-sm"
+		// 		role="status"
+		// 		aria-hidden="true">
+		// 	</span>
+		// 	<span">${this.#submitValue}</span>`;
+		// } else {
+		// 	subm.innerHTML = this.#submitValue;
+		// }	
 	}
 
 
-	async sendData(url, csrf)
+	async sendData(event)
 	{
-		const response = await fetch(url, {
+		event.preventDefault();
+
+		var editor = event.target.editor;
+		if (!editor.form.validateFields()) {
+			return
+		}
+		
+		editor.setLoading(true);
+
+		var body = new URLSearchParams((new FormData(event.target)).entries());
+		body.append("table", editor.name);
+
+		const response = await fetch(editor.addURL, {
 			method: 'POST',
 			headers: {
-				"X-CSRF-TOKEN": csrf
+				"X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
 			},
-			body: new URLSearchParams((new FormData(this.element)).entries())
+			body: body
 		});
-	
-		return response;
+
+		if (response.ok) {
+			await editor.update();
+		}
+
+		editor.setLoading(false);
 	}
 
 	
@@ -286,13 +382,6 @@ class TableEditorForm
 }
 
 
-async function getData(url)
-{
-	const response = await fetch(url);
-	return response;
-}
-
-
 function dataToArray(data)
 {
 	var arr = [];
@@ -308,42 +397,6 @@ function dataToArray(data)
 }
 
 
-async function tableEditorFormHandler(event)
-{
-	event.preventDefault();
-
-	// здесь надо как-то всплыть на editor
-
-	if (!event.target.editor.form.validateFields()) {
-		return
-	}
-	
-	event.target.editor.setLoading(true);
-	const resp1 = await event.target.editor.form.sendData(
-		event.target.editor.postURL,
-		document.querySelector('meta[name="csrf-token"]').content);
-	if (!resp1.ok) return;
-
-	var resp2 = await getData(event.target.editor.getURL);
-	if (!resp2.ok) return;
-	
-	var json = await resp2.json();
-	event.target.editor.setLoading(false);
-	event.target.editor.table.updateData(dataToArray(json.data));
-}
-
-
-function tableRowDeleteHandler(event)
-{
-	if (event.target.tagName != "BUTTON") return;
-	if (event.target.innerHTML != "Удалить") return;
-	
-	var primaryParam = event.target.closest("tr")
-		.children[event.target.closest("tbody").primaryIndex].innerHTML;
-	console.log(primaryParam);
-}
-
-
 export default class TableEditor
 {
 	name
@@ -351,17 +404,22 @@ export default class TableEditor
 	table
 	element
 	getURL
-	postURL
+	addURL
+	deleteURL
+	clearURL
+	data
 
 
-	constructor(name, getURL, postURL)
+	constructor(tableName)
 	{
-		this.name = name;
-		this.getURL = getURL;
-		this.postURL = postURL;
+		this.name = tableName;
+		this.getURL = `/tables?table=${this.name}`;
+		this.addURL = `/tables/add`;
+		this.deleteURL = "/tables/delete";
+		this.clearURL = "/tables/clear";
 
-		this.table = new Table(name);
-		this.form  = new TableEditorForm(name);
+		this.table = new Table(this.name, this);
+		this.form  = new TableEditorForm(this.name, this);
 
 		this.element = document.createElement("div");
 		this.element.className = "accordion m-4 shadow-sm";
@@ -409,38 +467,31 @@ export default class TableEditor
 		this.element = document.getElementById(this.element.id);
 		
 		this.table.init();
-		this.table.setLoading(true);
-
 		this.form.init();
-		this.form.element.editor = this;
-		this.form.element.onsubmit = tableEditorFormHandler;
 
-		var response = await getData(this.getURL);
-		if (!response.ok) {
+		if (!this.data) {
+			this.table.setLoading(true);
+			const response = await fetch(this.getURL);
+			if (!response.ok) return;
+			this.data = await response.json();
 			this.table.setLoading(false);
-			return;
 		}
 
-		var json = await response.json();
+		this.form.load();
+		this.table.load();
+	}
 
-		for (var i = 0; i < json.colinfo.length; i++) {
-			if (json.colinfo[i][3]) {
-				this.form.addField(json.colinfo[i][0], json.colinfo[i][1], json.colinfo[i][2])
-			}
+
+	async update()
+	{
+		const response = await fetch(this.getURL);
+		if (response.ok) {
+			this.data = await response.json();
+			this.table.update();
+			return 1;
+		} else {
+			return 0;
 		}
-		this.form.addField(null, "Добавить", "submit");
-
-		var columns = [];
-		for (var info of json.colinfo) {
-			columns.push(info[1]);
-		}
-
-		this.table.setData(dataToArray(json.data), columns);
-
-		this.table.tbody.primaryIndex = json.primaryIndex;
-		this.table.tbody.onclick = tableRowDeleteHandler;
-
-		this.table.setLoading(false);
 	}
 
 
