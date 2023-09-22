@@ -4,41 +4,53 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\DbRequest;
-use App\Models\Db;
+use App\Models\Names;
 
 class DbController extends Controller
 {
-	public function getData()
+	private function _switchModel(string $name)
 	{
-		// $db = new Db();
-		
+		switch ($name)
+		{
+			case "names":
+				return new Names();
+			default:
+				return NULL;
+		}
+	}
+
+	public function getDbPage()
+	{		
 		return view('db');
 	}
 
-	public function getJsonData()
+	public function getData(Request $request)
 	{
-		$db = new Db();
-		$response = [
-			"colinfo" => [
-				["Идентификатор", "number", false],
-				["Имя",           "text",   true ],
-				["Дата рождения", "date",   true ]
-			],
-			"data" => $db->all()
-		];
-		
+		$model = _switchModel($request->table);
+		$response = $model->getAllData();
+
 		return $response;
 	}
 
-	public function setData(DbRequest $request)
+	public function addEntry(DbRequest $request)
 	{
-		// return dd($request->input('dob'));
 		$db = new Db();
 		$db->firstname = $request->input('firstname');
 		$db->dob = $request->input('dob');
 
 		$db->save();
+	}
 
-		// dd($request->all());
+	public function deleteEntry()
+	{
+		
+	}
+
+	public function removeData(Request $request)
+	{
+		$model = _switchModel($table);
+		$model->truncate();
+
+		return redirect()->route("db");
 	}
 }

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DbController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,25 +15,29 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('index');
+	return view('index');
 })->name('index');
 
 Route::get('/db',
-	'App\Http\Controllers\DbController@getData'
+	[DbController::class, 'getDbPage']
 )->name('db');
 
-Route::post('/db/post',
-	'App\Http\Controllers\DbController@setData'
-)->name('dbpost');
+Route::get('/db/clear/{table}',
+	[DbController::class, 'removeData']
+)->name('db.clear');
 
-Route::get('/postdebug', function () {
-    return view('postdebug');
-})->name('postdebug');
+Route::post('/db/add-entry/',
+	[DbController::class, 'addEntry']
+)->name('db.addEntry');
 
 Route::get('/db/get',
-	'App\Http\Controllers\DbController@getJsonData'
-)->name('dbget');
+	[DbController::class, 'getData']
+)->name('db.getData');
+
+Route::post('/db/delete-entry',
+	[DbController::class, 'deleteEntry']
+)->name('db.deleteEntry');
 
 Route::get('/login', function () {
-    return view('login');
+	return view('login');
 })->name('login');
