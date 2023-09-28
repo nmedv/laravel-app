@@ -12,18 +12,17 @@ services:
     networks:
       - app-network
     volumes:
-      - app:/var/www
-      - docker/nginx/conf.d/:/etc/nginx/conf.d/
-      - certbot-etc:/etc/letsencrypt
-      - certbot-var:/var/lib/letsencrypt
+      - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
+      - ./certbot-etc:/etc/letsencrypt
+      - ./certbot-var:/var/lib/letsencrypt
 
   certbot:
     image: certbot/certbot
     container_name: certbot
     volumes:
-      - certbot-etc:/etc/letsencrypt
-      - certbot-var:/var/lib/letsencrypt
-      - app:/var/www
+      - ./certbot-etc:/etc/letsencrypt
+      - ./certbot-var:/var/lib/letsencrypt
+      - ./app:/var/www
     depends_on:
       - webserver
     command: certonly --webroot --webroot-path=/var/www/public --email nicmed2304@yandex.ru --agree-tos --no-eff-email --staging -d nmedv.ru  -d www.nmedv.ru
@@ -41,13 +40,11 @@ services:
     networks:
       - app-network
     volumes:
-      - docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
-
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
 
 networks:
   app-network:
     driver: bridge
-
 
 volumes:
   dbdata:

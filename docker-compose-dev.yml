@@ -1,34 +1,53 @@
 version: '3'
 services:
   webserver:
-    extends:
-      file: docker-compose.yml
-      service: webserver
+    image: nginx:alpine
+    container_name: webserver
+    depends_on:
+      - app
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "80:80"
+    networks:
+      - app-network
     volumes:
+      - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
+      - ./certbot-etc:/etc/letsencrypt
+      - ./certbot-var:/var/lib/letsencrypt
       - ./app:/var/www
 
   certbot:
-    extends:
-      file: docker-compose.yml
-      service: certbot
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - ./certbot-etc:/etc/letsencrypt
+      - ./certbot-var:/var/lib/letsencrypt
+      - ./app:/var/www
+    depends_on:
+      - webserver
+    command: certonly --webroot --webroot-path=/var/www/public --email nicmed2304@yandex.ru --agree-tos --no-eff-email --staging -d nmedv.ru  -d www.nmedv.ru
   
   app:
-    extends:
-      file: docker-compose.yml
-      service: app
     build:
       context: app
       dockerfile: Dockerfile.dev
+    container_name: app
+    restart: unless-stopped
+    tty: true
     environment:
       SERVICE_TAGS: dev
+      SERVICE_NAME: app
+    working_dir: /var/www
+    networks:
+      - app-network
     volumes:
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
       - ./app:/var/www
-  
 
 networks:
   app-network:
     driver: bridge
-
 
 volumes:
   dbdata:
