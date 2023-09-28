@@ -8,7 +8,7 @@ services:
     restart: unless-stopped
     tty: true
     ports:
-      - "80:80"
+      - "443:443"
     networks:
       - app-network
     volumes:
@@ -16,6 +16,7 @@ services:
       - ./certbot-etc:/etc/letsencrypt
       - ./certbot-var:/var/lib/letsencrypt
       - ./app:/var/www
+      - dhparam:/etc/ssl/certs
 
   certbot:
     image: certbot/certbot
@@ -26,7 +27,7 @@ services:
       - ./app:/var/www
     depends_on:
       - webserver
-    command: certonly --webroot --webroot-path=/var/www/public --email nicmed2304@yandex.ru --agree-tos --no-eff-email --staging -d nmedv.ru  -d www.nmedv.ru
+    command: certonly --webroot --webroot-path=/var/www/public --email nicmed2304@yandex.ru --agree-tos --no-eff-email --force-renewal -d nmedv.ru  -d www.nmedv.ru
   
   app:
     build:
@@ -50,5 +51,9 @@ networks:
     driver: bridge
 
 volumes:
-  dbdata:
+  dhparam:
     driver: local
+    driver_opts:
+      type: none
+      device: /home/nikita/dhparam/
+      o: bind
