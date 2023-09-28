@@ -1,6 +1,17 @@
 version: '3'
 services:
-  #PHP Service
+  webserver:
+    extends:
+      file: docker-compose.yml
+      service: webserver
+    volumes:
+      - ./app:/var/www
+
+  certbot:
+    extends:
+      file: docker-compose.yml
+      service: certbot
+  
   app:
     extends:
       file: docker-compose.yml
@@ -12,21 +23,13 @@ services:
       SERVICE_TAGS: dev
     volumes:
       - ./app:/var/www
+  
 
-  #Nginx Service
-  webserver:
-    extends:
-      file: docker-compose.yml
-      service: webserver
-    volumes:
-      - ./app:/var/www
-
-#Docker Networks
 networks:
   app-network:
     driver: bridge
-    
-#Volumes
+
+
 volumes:
   dbdata:
     driver: local
