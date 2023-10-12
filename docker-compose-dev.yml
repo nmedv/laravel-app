@@ -27,7 +27,7 @@ services:
       - ./app:/var/www
     depends_on:
       - webserver
-    command: certonly --webroot --webroot-path=/var/www/public --email nicmed2304@yandex.ru --agree-tos --no-eff-email --force-renewal -d nmedv.ru  -d www.nmedv.ru
+    command: certonly --webroot --webroot-path=/var/www/public --email nicmed2304@yandex.ru --agree-tos --no-eff-email --force-renewal -d nmedv.ru -d www.nmedv.ru
   
   app:
     build:

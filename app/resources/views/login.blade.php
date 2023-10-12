@@ -5,22 +5,35 @@
 @endsection
 
 @section('content')
-<div class="container border rounded-6 mt-5 shadow" style="width: fit-content">
+<div class="container border rounded-3 mt-5 shadow" style="width: fit-content">
 <section class="w-100 p-4 d-flex justify-content-center pb-4">
-<form style="width: 22rem;">
+<form style="width: 22rem;" method="POST" action="{{ route('login.process') }}">
 
 
-<h3 class="mb-5 text-center">Вход</h3>
+<h3 class="mb-5 mt-4 text-center">Вход</h3>
+
+@csrf
+
+@error('login')
+<p class="text-danger">{{ $message }}</p>
+@enderror
+
 <!-- Email input -->
+@error('email')
+<p class="text-danger">{{ $message }}</p>
+@enderror
 <div class="form-floating mb-4">
-	<input type="email" id="form1Example1" class="form-control" placeholder="login"/>
-	<label for="form1Example1">Логин</label>
+	<input type="email" id="email" name="email" class="form-control @error('email') border-danger @enderror" placeholder="login"/>
+	<label for="email">Электронная почта</label>
 </div>
 
 <!-- Password input -->
+@error('password')
+<p class="text-danger">{{ $message }}</p>
+@enderror
 <div class="form-floating mb-4">
-	<input type="password" id="form1Example2" class="form-control" placeholder="Password"/>
-	<label for="form1Example1">Пароль</label>
+	<input type="password" id="password" name="password" class="form-control @error('password') border-danger @enderror" placeholder="Password"/>
+	<label for="password">Пароль</label>
 </div>
 
 <!-- 2 column grid layout for inline styling -->

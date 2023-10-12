@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\TableAddRequest;
 use App\Models\Names;
 use App\Models\Students;
+use Illuminate\Support\Facades\Gate;
 
 
 function switchModel(string $name)
@@ -29,6 +30,8 @@ class TablesController extends Controller
 	 **/
 	public function tables(Request $request)
 	{
+		Gate::authorize("view-tables");
+
 		if ($request->table) {
 			$model = switchModel($request->table);
 			$response = $model->getAllData();
@@ -46,6 +49,8 @@ class TablesController extends Controller
 	 **/
 	public function add(TableAddRequest $request)
 	{
+		Gate::authorize("view-tables");
+
 		$json = $request->all();
 		$model = switchModel($json["table"]);
 		$model->addEntry($json);
@@ -58,6 +63,8 @@ class TablesController extends Controller
 	 **/
 	public function delete(Request $request)
 	{
+		Gate::authorize("view-tables");
+
 		$json = $request->all();
 		$model = switchModel($json["table"]);
 		$model->deleteEntry($json["id"]);
@@ -70,6 +77,8 @@ class TablesController extends Controller
 	 **/
 	public function clear(Request $request)
 	{
+		Gate::authorize("view-tables");
+		
 		if ($request->table) {
 			$model = switchModel($request->table);
 			$model->truncate();

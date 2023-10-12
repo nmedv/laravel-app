@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TablesController;
+use App\Http\Controllers\AuthController;
+use App\Http\Middleware\Authenticate;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,7 +28,7 @@ Route::get('/', function () {
 
 Route::get('/tables',
 	[TablesController::class, 'tables']
-)->name('tables');
+)->middleware(['auth'])->name('tables');
 
 Route::post('/tables/add',
 	[TablesController::class, 'add']
@@ -41,8 +43,24 @@ Route::get('/tables/clear',
 )->name('tables.clear');
 
 
-/* Login */
+/* Registration & Login */
 
-Route::get('/login', function () {
-	return view('login');
-})->name('login');
+Route::get('/register',
+	[AuthController::class, 'register']
+)->name('register');
+
+Route::get('/login',
+	[AuthController::class, 'login']
+)->name('login');
+
+Route::post('/register/process',
+	[AuthController::class, 'register_process']
+)->name('register.process');
+
+Route::post('/login/process',
+	[AuthController::class, 'login_process']
+)->name('login.process');
+
+Route::get('/logout',
+	[AuthController::class, 'logout']
+)->name('logout');

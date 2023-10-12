@@ -23,20 +23,32 @@
 			<!-- Left links -->
 
 			<div class="d-flex align-items-center">
+				@auth('web')
+				<a
+					type="button"
+					class="btn btn-outline-primary me-3"
+					href="{{ route('logout') }}"
+				>
+					Выйти
+				</a>
+				@endauth
+
+				@guest('web')
 				<a
 					type="button"
 					class="btn btn-outline-primary me-3"
 					href="{{ route('login') }}"
 				>
-					Вход
+					Войти
 				</a>
 				<a
 					type="button"
 					class="btn btn-primary me-3"
-					href="#"
+					href="{{ route('register') }}"
 				>
 					Регистрация
 				</a>
+				@endguest
 				
 				<!-- <a
 					class="btn btn-dark px-3"
