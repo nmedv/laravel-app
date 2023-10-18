@@ -5,5 +5,7 @@
 @endsection
 
 @section('content')
-	<h1>Добро пожаловать</h1>
+	<div class="m-4">
+		<h1>Добро пожаловать</h1>
+	</div>
 @endsection

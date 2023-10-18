@@ -1,66 +1,54 @@
 @extends('layouts.base')
 
+@section('navbar')
+
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light border-bottom">
-	<!-- Container wrapper -->
-	<div class="container-fluid mb-2 mt-2 align-items-center justify-content-center">
-		<!-- Navbar brand -->
-		<a class="navbar-brand me-2" href="{{ route('index') }}">
+<div class="container-fluid mx-3">
+	<!-- Navbar brand -->
+	<a class="navbar-brand" href="{{ route('index') }}">
 			<strong>laravel-app</strong>
-		</a>
+	</a>
 
-		<!-- Collapsible wrapper -->
-		<div class="collapse navbar-collapse" id="navbarButtonsExample">
-			<!-- Left links -->
-			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-				<li class="nav-item">
-					<a class="nav-link" href="{{ route('index') }}">Главная</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="{{ route('tables') }}">Таблицы</a>
-				</li>
-			</ul>
-			<!-- Left links -->
+	<button
+		class="navbar-toggler"
+		type="button"
+		data-bs-toggle="collapse"
+		data-bs-target="#navbarButtons"
+		aria-controls="navbarButtons"
+		aria-expanded="false"
+		aria-label="Переключатель навигации"
+	>
+		<span class="navbar-toggler-icon"></span>
+	</button>
 
-			<div class="d-flex align-items-center">
-				@auth('web')
-				<a
-					type="button"
-					class="btn btn-outline-primary me-3"
-					href="{{ route('logout') }}"
-				>
-					Выйти
-				</a>
-				@endauth
-
-				@guest('web')
-				<a
-					type="button"
-					class="btn btn-outline-primary me-3"
-					href="{{ route('login') }}"
-				>
-					Войти
-				</a>
-				<a
-					type="button"
-					class="btn btn-primary me-3"
-					href="{{ route('register') }}"
-				>
-					Регистрация
-				</a>
-				@endguest
-				
-				<!-- <a
-					class="btn btn-dark px-3"
-					href="https://github.com/mdbootstrap/mdb-ui-kit"
-					role="button"
-				>
-					<i class="fab fa-github"></i>
-				</a> -->
-			</div>
+	<!-- Collapsible wrapper -->
+	<div class="collapse navbar-collapse" id="navbarButtons">
+		<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+			<li class="nav-item">
+				<a class="nav-link" aria-current="page" href="{{ route('index') }}">Главная</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="{{ route('tables') }}">Таблицы</a>
+			</li>
+		</ul>
+		<div class="d-flex">
+			@auth('web')
+			<a type="button" class="btn btn-outline-primary me-3" href="{{ route('logout') }}">
+				Выйти
+			</a>
+			@endauth
+			@guest('web')
+			<a type="button" class="btn btn-outline-primary me-3" href="{{ route('login') }}">
+				Войти
+			</a>
+			<a type="button" class="btn btn-primary me-3" href="{{ route('register') }}">
+				Регистрация
+			</a>
+			@endguest
 		</div>
-		<!-- Collapsible wrapper -->
 	</div>
-	<!-- Container wrapper -->
+</div>
 </nav>
-<!-- Navbar -->
+
+@endsection

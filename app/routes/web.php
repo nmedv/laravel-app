@@ -23,6 +23,10 @@ Route::get('/', function () {
 	return view('index');
 })->name('index');
 
+Route::get('/test', function () {
+	return view('test');
+})->name('test');
+
 
 /* Tables */
 
@@ -30,17 +34,19 @@ Route::get('/tables',
 	[TablesController::class, 'tables']
 )->middleware(['auth'])->name('tables');
 
-Route::post('/tables/add',
+Route::name('tables.')->group(function () {
+	Route::post('/tables/add',
 	[TablesController::class, 'add']
-)->name('tables.add');
+	)->name('add');
 
-Route::post('/tables/delete',
-	[TablesController::class, 'delete']
-)->name('tables.deletе');
+	Route::post('/tables/delete',
+		[TablesController::class, 'delete']
+	)->name('deletе');
 
-Route::get('/tables/clear',
-	[TablesController::class, 'clear']
-)->name('tables.clear');
+	Route::get('/tables/clear',
+		[TablesController::class, 'clear']
+	)->name('clear');
+});
 
 
 /* Registration & Login */

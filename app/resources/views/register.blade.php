@@ -5,13 +5,15 @@
 @endsection
 
 @section('content')
+<div class="container p-4">
+<div class="row justify-content-center">
+<div class="col-12 col-md-8 col-lg-6 col-xl-4">
+<div class="card shadow-sm" style="border-radius: 1rem;">
+<div class="card-body p-5 text-center">
 
-<div class="container border rounded-3 mt-5 shadow" style="width: fit-content">
-<section class="w-100 p-4 d-flex justify-content-center pb-4">
-<form style="width: 22rem;" method="POST" action="{{ route('register.process') }}">
+<form method="POST" action="{{ route('register.process') }}">
 
-
-<h3 class="mb-5 mt-4 text-center">Регистрация</h3>
+<h3 class="mb-4">Регистрация</h3>
 
 @csrf
 
@@ -56,9 +58,11 @@
 	<button type="submit" class="btn btn-primary btn-block p-3 mt-4">Зарегистрироваться</button>
 </div>
 
-
 </form>
-</section>
-</div>
 
+</div>
+</div>
+</div>
+</div>
+</div>
 @endsection

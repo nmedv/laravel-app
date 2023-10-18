@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 
 class AuthController extends Controller
@@ -22,7 +24,7 @@ class AuthController extends Controller
 
 	public function logout()
 	{
-		auth("web")->logout();
+		Auth::logout();
 		return redirect(route("index"));
 	}
 
@@ -38,11 +40,11 @@ class AuthController extends Controller
 		$user = User::create([
 			"name"     => $data["name"],
 			"email"    => $data["email"],
-			"password" => bcrypt($data["password"])
+			"password" => Hash::make($data["password"])
 		]);
 
 		if ($user) {
-			auth("web")->login($user);
+			Auth::login($user);
 		}
 
 		return redirect(route("index"));
@@ -56,7 +58,7 @@ class AuthController extends Controller
 			"password" => ["required"]
 		]);
 
-		if (auth("web")->attempt($data)) {
+		if (Auth::attempt($data)) {
 			return redirect(route("index"));
 		}
 
