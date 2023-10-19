@@ -18,12 +18,12 @@
 @csrf
 
 <!-- Name input -->
-@error('name')
+@error('username')
 <p class="text-danger">{{ $message }}</p>
 @enderror
 <div class="form-floating mb-4">
-	<input type="text" id="name" name="name" class="form-control @error('name') border-danger @enderror" placeholder="name"/>
-	<label for="name">Имя пользователя</label>
+	<input type="text" id="username" name="username" class="form-control @error('username') border-danger @enderror" placeholder="name"/>
+	<label for="username">Имя пользователя</label>
 </div>
 
 <!-- Email input -->

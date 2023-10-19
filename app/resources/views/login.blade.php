@@ -21,13 +21,13 @@
 <p class="text-danger">{{ $message }}</p>
 @enderror
 
-<!-- Email input -->
-@error('email')
+<!-- Username input -->
+@error('username')
 <p class="text-danger">{{ $message }}</p>
 @enderror
 <div class="form-floating mb-4">
-	<input type="email" id="email" name="email" class="form-control @error('email') border-danger @enderror" placeholder="login"/>
-	<label for="email">Электронная почта</label>
+	<input type="test" id="username" name="username" class="form-control @error('username') border-danger @enderror" placeholder="username"/>
+	<label for="username">Имя пользователя</label>
 </div>
 
 <!-- Password input -->

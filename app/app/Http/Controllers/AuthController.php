@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
+use App\Models\Auth\User;
+use Illuminate\Contracts\Auth\Guard;
 
 class AuthController extends Controller
 {
@@ -32,13 +33,13 @@ class AuthController extends Controller
 	public function register_process(Request $request)
 	{
 		$data = $request->validate([
-			"name"    => ["required", "string"],
+			"username" => ["required", "string"],
 			"email"    => ["required", "email", "string", "unique:users,email"],
 			"password" => ["required", "confirmed"]
 		]);
 
 		$user = User::create([
-			"name"     => $data["name"],
+			"username" => $data["username"],
 			"email"    => $data["email"],
 			"password" => Hash::make($data["password"])
 		]);
@@ -54,14 +55,14 @@ class AuthController extends Controller
 	public function login_process(Request $request)
 	{
 		$data = $request->validate([
-			"email"    => ["required", "email", "string"],
+			"username" => ["required", "string"],
 			"password" => ["required"]
 		]);
 
-		if (Auth::attempt($data)) {
+		if (Auth::validate($data)) {
 			return redirect(route("index"));
 		}
 
-		return redirect(route("login"))->withErrors(["login" => "Неправильный адрес или пароль"]);
+		return redirect(route("login"))->withErrors(["login" => "Неправильное имя пользователя или пароль"]);
 	}
 }
