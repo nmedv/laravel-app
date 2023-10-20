@@ -7,7 +7,7 @@
 <div class="container-fluid mx-3">
 	<!-- Navbar brand -->
 	<a class="navbar-brand" href="{{ route('index') }}">
-			<strong>laravel-app</strong>
+		<strong>laravel-app</strong>
 	</a>
 
 	<button

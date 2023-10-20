@@ -25,7 +25,7 @@ class AuthController extends Controller
 	public function logout()
 	{
 		Auth::logout();
-		return redirect(route("index"));
+		return redirect("/");
 	}
 
 
@@ -44,7 +44,7 @@ class AuthController extends Controller
 		]);
 
 		if ($user) {
-			Auth::login($user);
+			Auth::login($user, $request->has("remember"));
 		}
 
 		return redirect(route("index"));
@@ -58,10 +58,15 @@ class AuthController extends Controller
 			"password" => ["required"]
 		]);
 
-		if (Auth::attempt($data)) {
-			return redirect(route("index"));
+		if (Auth::viaRemember()) {
+			return redirect()->intended();
+		}
+		elseif (Auth::attempt($data, $request->has("remember"))) {
+			$request->session()->regenerate();
+
+			return redirect()->intended();
 		}
 
-		return redirect(route("login"))->withErrors(["login" => "Неправильный адрес или пароль"]);
+		return back()->withErrors(["login" => "Неправильный адрес или пароль"]);
 	}
 }

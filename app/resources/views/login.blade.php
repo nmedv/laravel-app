@@ -13,51 +13,62 @@
 
 <form method="POST" action="{{ route('login.process') }}">
 
-<h3 class="mb-4">Вход</h3>
+<h3 class="mb-5">Вход</h3>
 
 @csrf
 
-@error('login')
-<p class="text-danger">{{ $message }}</p>
-@enderror
-
 <!-- Email input -->
-@error('email')
-<p class="text-danger">{{ $message }}</p>
-@enderror
-<div class="form-floating mb-4">
+
+<div class="form-floating">
 	<input type="email" id="email" name="email" class="form-control @error('email') border-danger @enderror" placeholder="login"/>
 	<label for="email">Электронная почта</label>
 </div>
+@error('email')@include('components.form-error')@enderror
 
 <!-- Password input -->
-@error('password')
-<p class="text-danger">{{ $message }}</p>
-@enderror
-<div class="form-floating mb-4">
+<div class="form-floating mt-4">
 	<input type="password" id="password" name="password" class="form-control @error('password') border-danger @enderror" placeholder="Password"/>
 	<label for="password">Пароль</label>
 </div>
+@error('password')@include('components.form-error')@enderror
+
+@error('login')
+<div class="row mt-4">
+	<div class="col d-flex justify-content-start">
+		<p class="text-danger mb-0">{{ $message }}</p>
+	</div>
+</div>
+@enderror
 
 <!-- 2 column grid layout for inline styling -->
-<div class="row mb-4">
-	<div class="col d-flex justify-content-center">
+<div class="row mt-4">
+	<div class="col d-flex justify-content-start">
 	<!-- Checkbox -->
 	<div class="form-check">
-		<input class="form-check-input" type="checkbox" value="" id="form1Example3" checked />
+		<input class="form-check-input" type="checkbox" name="remember" id="form1Example3" checked />
 		<label class="form-check-label" for="form1Example3"> Запомнить меня </label>
 	</div>
-	</div>
-
-	<div class="col">
-	<!-- Simple link -->
-	<a href="#!">Забыли пароль?</a>
 	</div>
 </div>
 
 <!-- Submit button -->
-<button type="submit" class="btn btn-primary btn-block">Войти</button>
+<div class="row mt-4">
+	<div class="d-flex flex-column">
+		<button type="submit" class="btn btn-primary">Войти</button>
+	</div>
+</div>
 
+<!-- Simple link -->
+<div class="row mt-4">
+	<div class="col d-flex justify-content-start">
+		<a href="#!">Забыли пароль?</a>
+	</div>
+</div>
+<div class="row">
+	<div class="col d-flex justify-content-start">
+		<a href="{{ route('register') }}">Регистрация</a>
+	</div>
+</div>
 
 </div>
 </div>
