@@ -36,7 +36,7 @@ Route::get('/tables',
 
 Route::name('tables.')->group(function () {
 	Route::post('/tables/add',
-	[TablesController::class, 'add']
+		[TablesController::class, 'add']
 	)->name('add');
 
 	Route::post('/tables/delete',
@@ -70,3 +70,10 @@ Route::post('/login/process',
 Route::get('/logout',
 	[AuthController::class, 'logout']
 )->name('logout');
+
+
+/* Cabinet */
+
+Route::get('/cabinet', function () {
+	return view('cabinet');
+})->middleware(['auth'])->name('cabinet');

@@ -22,6 +22,7 @@
 	<input type="text" id="name" name="name" class="form-control @error('name') border-danger @enderror" placeholder="name"/>
 	<label for="name">Имя пользователя</label>
 </div>
+@error('name')@include('components.form-error')@enderror
 
 
 <!-- Email input -->

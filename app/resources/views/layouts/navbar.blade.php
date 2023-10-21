@@ -31,6 +31,9 @@
 			<li class="nav-item">
 				<a class="nav-link" href="{{ route('tables') }}">Таблицы</a>
 			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="{{ route('cabinet') }}">Кабинет</a>
+			</li>
 		</ul>
 		<div class="d-flex">
 			@auth('web')
