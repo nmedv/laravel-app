@@ -1,15 +1,11 @@
-@extends('layouts.base')
+@extends('layouts.auth-box')
 
 @section('title')
 	Вход
 @endsection
 
-@section('content')
-<div class="container p-4">
-<div class="row justify-content-center">
-<div class="col-12 col-md-8 col-lg-6 col-xl-5">
-<div class="card shadow-sm" style="border-radius: 1rem;">
-<div class="card-body p-5 text-center">
+@section('box-content')
+<div class="text-center">
 
 <form method="POST" action="{{ route('login.process') }}">
 
@@ -32,13 +28,7 @@
 </div>
 @error('password')@include('components.form-error')@enderror
 
-@error('login')
-<div class="row mt-4">
-	<div class="col d-flex justify-content-start">
-		<p class="text-danger mb-0">{{ $message }}</p>
-	</div>
-</div>
-@enderror
+@error('login')@include('components.message-error')@enderror
 
 <!-- 2 column grid layout for inline styling -->
 <div class="row mt-4">
@@ -58,6 +48,8 @@
 	</div>
 </div>
 
+</form>
+
 <!-- Simple link -->
 <div class="row mt-4">
 	<div class="col d-flex justify-content-start">
@@ -70,9 +62,5 @@
 	</div>
 </div>
 
-</div>
-</div>
-</div>
-</div>
 </div>
 @endsection

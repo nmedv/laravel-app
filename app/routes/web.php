@@ -1,9 +1,12 @@
 <?php
 
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\TablesController;
 use App\Http\Controllers\AuthController;
-use App\Http\Middleware\Authenticate;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -32,7 +35,7 @@ Route::get('/test', function () {
 
 Route::get('/tables',
 	[TablesController::class, 'tables']
-)->middleware(['auth'])->name('tables');
+)->middleware(['auth', 'verified'])->name('tables');
 
 Route::name('tables.')->group(function () {
 	Route::post('/tables/add',
@@ -72,8 +75,25 @@ Route::get('/logout',
 )->name('logout');
 
 
+/* Email */
+
+Route::get('/email/verify', function () {
+	return view('verify-email');
+})->middleware('auth')->name('verification.notice');
+
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+    return view('verify-email-success');
+})->middleware(['auth', 'signed'])->name('verification.verify');
+
+Route::post('/email/verification-notification', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+    return back()->with('message', 'Verification link sent!');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
+
 /* Cabinet */
 
 Route::get('/cabinet', function () {
 	return view('cabinet');
-})->middleware(['auth'])->name('cabinet');
+})->middleware(['auth', 'verified'])->name('cabinet');

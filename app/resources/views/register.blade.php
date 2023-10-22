@@ -1,15 +1,11 @@
-@extends('layouts.base')
+@extends('layouts.auth-box')
 
 @section('title')
 	Регистрация
 @endsection
 
-@section('content')
-<div class="container p-4">
-<div class="row justify-content-center">
-<div class="col-12 col-md-8 col-lg-6 col-xl-5">
-<div class="card shadow-sm" style="border-radius: 1rem;">
-<div class="card-body p-5 text-center">
+@section('box-content')
+<div class="text-center">
 
 <form method="POST" action="{{ route('register.process') }}">
 
@@ -56,6 +52,8 @@
 	</div>
 </div>
 
+@error('register')@include('components.message-error')@enderror
+
 <!-- Submit button -->
 <div class="container mt-4 px-0">
 	<div class="row g-2">
@@ -70,9 +68,5 @@
 
 </form>
 
-</div>
-</div>
-</div>
-</div>
 </div>
 @endsection
