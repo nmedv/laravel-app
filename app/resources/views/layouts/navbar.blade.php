@@ -29,10 +29,7 @@
 				<a class="nav-link" aria-current="page" href="{{ route('index') }}">Главная</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="{{ route('tables') }}">Таблицы</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="{{ route('cabinet') }}">Кабинет</a>
+				<a class="nav-link" href="{{ route('cabinet') }}">Личный кабинет</a>
 			</li>
 		</ul>
 		<div class="d-flex">
