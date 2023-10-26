@@ -4,8 +4,10 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\TablesController;
+
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ResetPasswordController;
+use App\Http\Controllers\TablesController;
 
 
 /*
@@ -75,6 +77,13 @@ Route::get('/logout',
 )->name('logout');
 
 
+/* Cabinet */
+
+Route::get('/cabinet', function () {
+	return view('cabinet');
+})->middleware(['auth', 'verified'])->name('cabinet');
+
+
 /* Email */
 
 Route::get('/email/verify', function () {
@@ -92,8 +101,20 @@ Route::post('/email/verification-notification', function (Request $request) {
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
 
-/* Cabinet */
+/* Password reset */
 
-Route::get('/cabinet', function () {
-	return view('cabinet');
-})->middleware(['auth', 'verified'])->name('cabinet');
+Route::get('/forgot-password',
+	[ResetPasswordController::class, 'request']
+)->middleware('guest')->name('password.request');
+
+Route::post('/forgot-password',
+	[ResetPasswordController::class, 'sendEmail']
+)->middleware('guest')->name('password.email');
+
+Route::get('/reset-password/{token}',
+	[ResetPasswordController::class, 'reset']
+)->middleware('guest')->name('password.reset');
+
+Route::post('/reset-password',
+	[ResetPasswordController::class, 'update']
+)->middleware('guest')->name('password.update');

@@ -41,6 +41,14 @@
 	</div>
 </div>
 
+@if(session()->has('status'))
+<div class="row mt-4">
+	<div class="col d-flex justify-content-start">
+		<p class="text-success mb-0">{{ session()->get('status') }}</p>
+	</div>
+</div>
+@endif
+
 <!-- Submit button -->
 <div class="row mt-4">
 	<div class="d-flex flex-column">
@@ -53,7 +61,7 @@
 <!-- Simple link -->
 <div class="row mt-4">
 	<div class="col d-flex justify-content-start">
-		<a href="#!">Забыли пароль?</a>
+		<a href="{{ route('password.request') }}">Забыли пароль?</a>
 	</div>
 </div>
 <div class="row">
