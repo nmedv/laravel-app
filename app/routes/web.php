@@ -64,13 +64,13 @@ Route::get('/login',
 	[AuthController::class, 'login']
 )->name('login');
 
-Route::post('/register/process',
+Route::post('/register',
 	[AuthController::class, 'register_process']
-)->name('register.process');
+)->middleware('throttle:6,1')->name('register.process');
 
-Route::post('/login/process',
+Route::post('/login',
 	[AuthController::class, 'login_process']
-)->name('login.process');
+)->middleware('throttle:6,1')->name('login.process');
 
 Route::get('/logout',
 	[AuthController::class, 'logout']
@@ -113,7 +113,7 @@ Route::post('/forgot-password',
 
 Route::get('/reset-password/{token}',
 	[ResetPasswordController::class, 'reset']
-)->middleware('guest')->name('password.reset');
+)->middleware(['guest', 'throttle:6,1'])->name('password.reset');
 
 Route::post('/reset-password',
 	[ResetPasswordController::class, 'update']

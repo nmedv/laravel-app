@@ -9,9 +9,11 @@ services:
     tty: true
     ports:
       - "80:80"
+      - "443:443"
     networks:
       - app-network
     volumes:
+      -  /etc/ssl/certs/dhparam-2048.pem:/etc/ssl/certs/dhparam-2048.pem
       - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
       - ./certbot-etc:/etc/letsencrypt
       - ./certbot-var:/var/lib/letsencrypt
@@ -25,7 +27,7 @@ services:
       - ./app:/var/www
     depends_on:
       - webserver
-    command: certonly --webroot --webroot-path=/var/www/public --email nicmed2304@yandex.ru --agree-tos --no-eff-email --staging -d nmedv.ru  -d www.nmedv.ru
+    command: certonly --webroot -w /var/www/public -d nmedv.ru -d www.nmedv.ru
 
   app:
     build:
