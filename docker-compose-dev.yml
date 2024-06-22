@@ -17,6 +17,7 @@ services:
       - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
       - ./certbot-etc:/etc/letsencrypt
       - ./certbot-var:/var/lib/letsencrypt
+      - /home/nikita/csr:/digital.gov.ru
       - ./app:/var/www
 
   certbot:
@@ -51,6 +52,3 @@ networks:
   app-network:
     driver: bridge
 
-volumes:
-  dhparam:
-    driver: local
