@@ -1,3 +1,14 @@
+# laravel-app
+
+This is a small test application implemented using the Laravel framework. The application implements a working user accounting system: registration system, login system, password reset system with confirmation via email and so on. The frontend of the site was created using the Bootstrap library. Docker is used to deploy the application.
+
+## Screenshots:
+
+![Login form](screenshots/login.png)
+![Register form](screenshots/register.png)
+![Forgot password form](screenshots/forgot-password.png)
+![Cabinet](screenshots/lk.png)
+
 ## How to run app
 
 Create .env file by copying the template:

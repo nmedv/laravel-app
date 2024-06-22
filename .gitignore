@@ -1,2 +1,5 @@
 certbot-etc
 certbot-var
+nwaf
+tests
+.vscode
